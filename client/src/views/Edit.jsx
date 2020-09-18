@@ -1,21 +1,29 @@
 import React,{useState,useEffect} from 'react';
 import Axios from 'axios';
-import JokeForm from '../components/JokeForm';
+import PetForm from '../components/PetForm';
 import { navigate } from '@reach/router';
 
 const Edit = props => {
     const initialErrors = {
-        setup:"",
-        punchline:""
+        petName:"",
+        petType:"",
+        petDesc:"",
+        skillOne:"",
+        skillTwo:"",
+        skillThree:""
     }
     const [edit,setEdit] = useState({
-        setup:"",
-        punchline:""
+        petName:"",
+        petType:"",
+        petDesc:"",
+        skillOne:"",
+        skillTwo:"",
+        skillThree:""
     });
     const [errors,setErrors] = useState(initialErrors);
 
     useEffect(() => {
-        Axios.get(`http://localhost:8000/api/joke/${props.id}`)
+        Axios.get(`http://localhost:8000/api/pet/${props.id}`)
             .then(res => setEdit(res.data.results))
             .catch(err => console.log(err));
     }, [props])
@@ -30,29 +38,22 @@ const Edit = props => {
     const handleSubmit = e => {
         e.preventDefault();
         setErrors(initialErrors)
-        Axios.put(`http://localhost:8000/api/update/joke/${edit._id}`,edit)
+        Axios.put(`http://localhost:8000/api/update/pet/${edit._id}`,edit)
             .then(res => {
-                if (res.data.results){
-                    navigate("/")
-                }
-                else{
-                    console.log(res.data)
-                    setErrors(res.data)
-                }
+                navigate(`/pet/${edit._id}`)
             })
-            .catch(err => console.log(err));
+            .catch(err => setErrors(err.response.data.errors));
     }
     return(
         <div>
-            <h2>Edit joke</h2>
-            <JokeForm 
+            <h2>Edit {edit.petName}</h2>
+            <PetForm 
                 inputs = {edit}
+                errors={errors}
                 handleInput={handleInput}
                 handleSubmit={handleSubmit}
-                errors={errors}
-                submitValue="Edit Joke"
+                submitValue="Edit Pet"
             />
-
         </div>
     )
 }

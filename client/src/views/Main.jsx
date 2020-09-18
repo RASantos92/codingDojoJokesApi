@@ -3,25 +3,41 @@ import Axios from 'axios';
 import { Link } from '@reach/router'
 
 const Main = props => {
-    const [joke, setJoke] = useState([]);
+    const [pet, setPet] = useState([]);
 
     useEffect(() => {
-        Axios.get('http://localhost:8000/api/jokes')
-            .then(res => setJoke(res.data.results))
+        Axios.get('http://localhost:8000/api/pet')
+            .then(res => setPet(res.data.results))
             .catch(err => console.log(err))
     }, [])
 
     return (
         <div>
-            {
-                joke.map((j, i) => {
-                    return <div key={i}>
-                        <Link to={`/joke/${j._id}`}>Joke {i + 1}</Link>
-                        <p>{j.setup} , {j.punchline}</p>
-                        <Link to={`/edit/${j._id}`} className="btn btn-success">Edit Joke {i + 1}</Link>
-                    </div>
-                })
-            }
+            <table className="table table-success col-8 mx-auto">
+                <thead>
+                    <th></th>
+                    <th>Pet Name</th>
+                    <th>Pet Type</th>
+                    <th>pet Description</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    {
+                        pet.map((p, i) => {
+                            return <tr key={i}>
+                                
+                                <td>{i + 1}</td>
+                                <td>{p.petName}</td>
+                                <td>{p.petType}</td>
+                                <td>{p.petDesc}</td>
+                                <td><Link to={`/edit/${p._id}`} className="btn btn-warning">Edit Pet {i + 1}</Link><Link className="btn btn-success" to={`/pet/${p._id}`}>Show Pet {i + 1}</Link></td>
+                                
+                            </tr>
+                        })
+                    }
+                </tbody>
+
+            </table>
         </div>
     );
 }

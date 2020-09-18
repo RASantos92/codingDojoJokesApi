@@ -8,4 +8,4 @@ app.use(cors());
 app.use(express.json());
 // imports file into one line
 require('./server/config/config.database');
-require('./server/routes/jokes.routes')(app)
+require('./server/routes/pet.routes')(app)

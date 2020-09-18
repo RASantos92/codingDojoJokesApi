@@ -1,22 +1,30 @@
 import React,{useState} from 'react';
 import Axios from 'axios';
-import JokeForm from '../components/JokeForm';
+import PetForm from '../components/PetForm';
 import { navigate } from '@reach/router';
 
 const New = props => {
-    const initialJoke = {
-        setup:"",
-        punchline:""
+    const initialPet = {
+        petName:"",
+        petType:"",
+        petDesc:"",
+        skillOne:"",
+        skillTwo:"",
+        skillThree:""
     }
     const initialErrors = {
-        setup:"",
-        punchline:""
+        petName:"",
+        petType:"",
+        petDesc:"",
+        skillOne:"",
+        skillTwo:"",
+        skillThree:""
     }
-    const [joke,setJoke] = useState(initialJoke)
+    const [pet,setPet] = useState(initialPet)
     const [errors,setErrors] = useState(initialErrors);
     const handleInput = e => {
-        setJoke({
-            ...joke,
+        setPet({
+            ...pet,
             [e.target.name]:e.target.value
         })
     }
@@ -24,10 +32,10 @@ const New = props => {
     const handleSubmit = e => {
         e.preventDefault();
         setErrors(initialErrors)
-        Axios.post("http://localhost:8000/api/create/joke",joke)
+        Axios.post("http://localhost:8000/api/create/pet",pet)
             .then(res => {
                 if (res.data.results){
-                    setJoke(initialJoke);
+                    setPet(initialPet);
                     navigate("/")
                 }
                 else{
@@ -39,15 +47,14 @@ const New = props => {
     }
     return(
         <div>
-            <h2> Add A Joke</h2>
-            <JokeForm 
-                inputs = {joke}
+            <h2> Add A Pet</h2>
+            <PetForm 
+                inputs = {pet}
+                errors={errors}
                 handleInput={handleInput}
                 handleSubmit={handleSubmit}
-                errors={errors}
-                submitValue="Add Joke"
+                submitValue="Add Pet"
             />
-
         </div>
     )
 }
